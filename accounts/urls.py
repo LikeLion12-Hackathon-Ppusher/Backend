@@ -18,6 +18,6 @@ urlpatterns = [
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
     # kakao
     path('kakao/login/', KakaoLoginView.as_view()),
-    path('kakao/login/callback/', KakaoCallbackView.as_view())
+    path('kakao/callback/', KakaoCallbackView.as_view())
 
 ]
