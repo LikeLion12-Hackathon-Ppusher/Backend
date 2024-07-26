@@ -58,6 +58,7 @@ DJANGO_APPS = [
 
 PROJECT_APPS = [
     'tests',
+    'accounts'
 ]
 
 THIRDPARTY_APPS = [
@@ -66,6 +67,8 @@ THIRDPARTY_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRDPARTY_APPS
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
