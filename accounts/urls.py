@@ -16,4 +16,8 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    # kakao
+    path('kakao/login/', KakaoLoginView.as_view()),
+    path('kakao/login/callback/', KakaoCallbackView.as_view())
+
 ]
