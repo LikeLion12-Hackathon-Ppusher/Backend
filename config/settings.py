@@ -161,13 +161,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# # 여기서부터 kakao oauth 관련 코드
-# KAKAO_CONFIG = {
-#     "KAKAO_REST_API_KEY": REST API 키,
-#     "KAKAO_REDIRECT_URI": "http://localhost:8000/oauth/kakao/login/callback/",
-#     "KAKAO_CLIENT_SECRET_KEY": Client Secret 키, 
-# }
+# 여기서부터 kakao oauth 관련 코드
+KAKAO_CONFIG = {
+    "KAKAO_REST_API_KEY": get_secret("KAKAO_REST_API_KEY"),
+    "KAKAO_REDIRECT_URI": "http://localhost:3000/oauth",
+    "KAKAO_CLIENT_SECRET_KEY": get_secret("KAKAO_CLIENT_SECRET_KEY"), 
+}
 
-# kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
-# kakao_token_uri = "https://kauth.kakao.com/oauth/token"
-# kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"
+kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
+kakao_token_uri = "https://kauth.kakao.com/oauth/token"
+kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"

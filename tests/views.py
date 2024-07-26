@@ -52,3 +52,18 @@ class PostDetail(APIView):
         post = get_object_or_404(Post, id=id)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class KakaoLoginView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        '''
+        kakao code 요청
+        '''
+        client_id = KAKAO_CONFIG['KAKAO_REST_API_KEY']
+        redirect_uri = KAKAO_CONFIG['KAKAO_REDIRECT_URI']
+
+        uri = f"{kakao_login_uri}?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+        
+        res = redirect(uri)
+        return res
