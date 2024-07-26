@@ -1,7 +1,19 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+# Create your models here.
 
 
+class User(AbstractUser):
+    pass
+
+    @staticmethod
+    def get_user_or_none_by_username(username):
+        try:
+            return User.objects.get(username=username)
+        except Exception:
+            return None
+        
 class CustomUserManager(BaseUserManager):
     def _create_user(self, social_id, role=None, **extra_fields):
         if extra_fields.get('is_admin') is True:
@@ -71,3 +83,4 @@ class UserModel(AbstractBaseUser):
         db_table = 'users'
         app_label = 'users'
         verbose_name_plural = '회원정보'
+
