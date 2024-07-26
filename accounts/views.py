@@ -137,9 +137,9 @@ class KakaoCallbackView(APIView):
 
         request_data = {
             'grant_type': 'authorization_code',
-            'client_id': settings.KAKAO_REST_API_KEY,
-            'redirect_uri': settings.KAKAO_REDIRECT_URI,
-            'client_secret': settings.KAKAO_CLIENT_SECRET_KEY,
+            'client_id': KAKAO_CONFIG['KAKAO_REST_API_KEY'],
+            'redirect_uri': KAKAO_CONFIG['KAKAO_REDIRECT_URI'],
+            'client_secret': KAKAO_CONFIG['KAKAO_CLIENT_SECRET_KEY'],
             'code': code,
         }
         token_headers = {
