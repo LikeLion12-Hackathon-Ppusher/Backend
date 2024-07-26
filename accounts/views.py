@@ -134,7 +134,7 @@ class KakaoCallbackView(APIView):
         code = data.get('code')
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
+        print(code)
         request_data = {
             'grant_type': 'authorization_code',
             'client_id': KAKAO_CONFIG['KAKAO_REST_API_KEY'],
@@ -142,8 +142,9 @@ class KakaoCallbackView(APIView):
             'client_secret': KAKAO_CONFIG['KAKAO_CLIENT_SECRET_KEY'],
             'code': code,
         }
+        print(request_data)
         token_headers = {
-            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            'Content-type': 'application/x-www-form-urlencoded'
         }
         token_res = requests.post(kakao_token_uri, data=request_data, headers=token_headers)
 
@@ -151,6 +152,7 @@ class KakaoCallbackView(APIView):
         access_token = token_json.get('access_token')
 
         if not access_token:
+            print("access_token error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         access_token = f"Bearer {access_token}"  # 'Bearer ' 마지막 띄어쓰기 필수
 
@@ -167,9 +169,13 @@ class KakaoCallbackView(APIView):
 
         kakao_account = user_info_json.get('kakao_account')
         if not kakao_account:
+            print("kakao_account error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         user_email = kakao_account.get('email')
 
         # 회원가입 및 로그인
-        res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+        # res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+        res = Response({
+            "access token" : access_token
+        })
         return res
