@@ -19,6 +19,7 @@ from django.core.exceptions import ImproperlyConfigured
 # set BaseDIR
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -78,6 +79,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [ 
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -152,3 +160,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# # 여기서부터 kakao oauth 관련 코드
+# KAKAO_CONFIG = {
+#     "KAKAO_REST_API_KEY": REST API 키,
+#     "KAKAO_REDIRECT_URI": "http://localhost:8000/oauth/kakao/login/callback/",
+#     "KAKAO_CLIENT_SECRET_KEY": Client Secret 키, 
+# }
+
+# kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
+# kakao_token_uri = "https://kauth.kakao.com/oauth/token"
+# kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"
