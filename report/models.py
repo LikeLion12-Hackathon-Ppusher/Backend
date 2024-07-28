@@ -1,4 +1,6 @@
 from django.db import models
+from place.models import *
+from accounts.models import *
 
 class Report():
     CHOICES = (
@@ -9,9 +11,9 @@ class Report():
     reportId = models.AutoField(primary_key=True)
 
     # FK
-    placeId = models.ForeignKey("place.modelsPlace", related_name="place", on_delete=models.CASCADE)
-    userId = models.ForeignKey("accounts.modelsUser", related_name="user", on_delete=models.CASCADE)
+    placeId = models.ForeignKey(Place, verbose_name="Place", on_delete=models.CASCADE)
+    userId = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
 
     # field
-    description = models.TextField(verbose_name = "상세 정보", max_length=100)
+    description = models.TextField(verbose_name = "Description", max_length=100)
     reportType = models.CharField(choices=CHOICES, max_length=2)
