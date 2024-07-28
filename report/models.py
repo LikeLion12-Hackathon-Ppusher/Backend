@@ -2,7 +2,7 @@ from django.db import models
 from place.models import *
 from accounts.models import *
 
-class Report():
+class Report(models.Model):
     CHOICES = (
         ('SH', '간접 흡연 구역'),
         ('SM', '흡연 구역')

@@ -7,17 +7,17 @@ class Place(models.Model):
     name = models.CharField(max_length=255)
     imageUrl = models.URLField()
 
-class SecondhandSmokingPlace():
+class SecondhandSmokingPlace(models.Model):
     SecondhandSmokingPlaceId = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, verbose_name = "Place", on_delete=models.CASCADE)
 
-class NoSmokingPlace():
+class NoSmokingPlace(models.Model):
     NoSmokingPlaceId = models.AutoField(primary_key=True)
     placeId = models.ForeignKey(Place, verbose_name = "Place", on_delete=models.CASCADE)
     latitude = models.FloatField()
     longitude = models.FloatField()
 
-class SmokingPlace():
+class SmokingPlace(models.Model):
     CHOICES = (
         ('1', '1'),
         ('2', '2'),

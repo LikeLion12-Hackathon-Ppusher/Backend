@@ -34,7 +34,7 @@ class User(AbstractBaseUser):
     time = models.IntegerField(choices=TIME ,null=True)
     option = models.BooleanField(default=False)
 
-    USERNAME_FIELD = kakaoEmail
+    USERNAME_FIELD = 'kakaoEmail'
 
     @staticmethod
     def get_user_or_none_by_email(kakao_email):
