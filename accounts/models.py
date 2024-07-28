@@ -1,21 +1,44 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
 
-class User(AbstractUser):
-    pass #해당 세션에서 바로 유저모델을 사용할 것은 아니기 때문에 pass로 넣겠습니다.
+class User(AbstractBaseUser):
+
+    USER_TYPE = (
+        ('SY','흡연자'),
+        ('SN','비흡연자')
+    )
+
+    DISTANCE = (
+        (0,'10M'),
+        (1,'20M'),
+        (2,'30M')
+    )
+
+    GENDER = (
+        ('M', '남자'),
+        ('F', '여자')
+    )
+
+    TIME = (
+        (0 ,'즉시'),
+        (1 ,'5분'),
+        (2, '10분')
+    )
+
+    userId = models.AutoField(primary_key=True)
+    userType = models.CharField(choices=USER_TYPE, max_length=2)
+    kakaoEmail = models.EmailField(unique=True)
+    name = models.CharField(max_length=10)
+    gender = models.CharField(choices=GENDER, max_length=1)
+    distance = models.IntegerField(choices=DISTANCE, null=True)
+    time = models.IntegerField(choices=TIME ,null=True)
+    option = models.BooleanField(default=False)
+
+    USERNAME_FIELD = kakaoEmail
 
     @staticmethod
-    def get_user_or_none_by_username(username):
-        # 왜 try-exception? -> get은 error를 반환! filter는 None을 반환~
+    def get_user_or_none_by_email(kakao_email):
         try:
-            return User.objects.get(username=username)
-        except Exception:
-            return None
-
-    # 얘가 추가된게 중요하다고 하네요~
-    @staticmethod
-    def get_user_or_none_by_email(email):
-        try:
-            return User.objects.get(email=email)
+            return User.objects.get(kakao_email=kakao_email)
         except Exception:
             return None
