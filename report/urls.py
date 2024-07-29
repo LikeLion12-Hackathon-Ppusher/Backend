@@ -4,6 +4,5 @@ from report.views import *
 
 
 urlpatterns = [
-    path('smokingplace', SmokingPlaceReport.as_view()),
-    path('shsmokingplace', SecondHandSmokingPlaceReport.as_view()),
+    path('', PlaceReport.as_view()),
 ]

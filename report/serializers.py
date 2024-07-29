@@ -1,13 +1,17 @@
 ###Model Serializer case
 from rest_framework import serializers
 from .models import *
+from place.serializers import *
 
 class ReportSerializer(serializers.ModelSerializer):
+    place = PlaceSerializer()
 
     class Meta:
-            # 어떤 모델을 시리얼라이즈할 건지
         model = Report
-            # 모델에서 어떤 필드를 가져올지
-            # 전부 가져오고 싶을 때
-        fields = "__all__"
-        
+        fields = ['reportId', 'place', 'userId', 'description', 'reportType']
+
+    def create(self, validated_data):
+        place_data = validated_data.pop('place')
+        place = Place.objects.create(**place_data)
+        user = validated_data.pop('userId')
+        return Report.objects.create(placeId=place, userId=user, **validated_data)
