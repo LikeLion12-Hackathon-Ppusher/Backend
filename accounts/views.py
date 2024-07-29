@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegisterSerializer, AuthSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny, LoginRequired
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import logout
 from config.settings import *
 from .models import User
@@ -20,11 +20,11 @@ class UserView(APIView):
     permission_classes = [AllowAny]
 
     # data : request.data
-    def get_or_create_user(self, data):
+    def create_user(self, data):
         serializer = RegisterSerializer(data=data)
 
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save(data)
+            user = serializer.create(serializer.validated_data)
             token = RefreshToken.for_user(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
@@ -60,8 +60,8 @@ class LoginView(APIView):
             res = Response(
                 {
                     "user": {
-                        "id": user.id,
-                        "email": user.email,
+                        "userId": user.userId,
+                        "kakaoEmail": user.kakaoEmail,
                     },
                     "message": "login success",
                     "token": {
@@ -83,33 +83,33 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated, LoginRequired]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         logout(request)
         return Response({"message": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
 
-def login_api(social_type: str, social_id: str, email: str=None, phone: str=None):
+def login_api(social_id: str, email: str=None, phone: str=None):
 
     # 회원가입 및 로그인
     login_view = LoginView()
     try:
-        User.objects.get(social_id=social_id)
+        User.objects.get(userId=social_id)
         data = {
-            'social_id': social_id,
-            'email': email,
+            'userId': social_id,
+            'kakaoEmail': email,
         }
         response = login_view.object(data=data)
 
     except User.DoesNotExist:
+        print("없는 유저에요~")
         data = {
-            'social_type': social_type,
-            'social_id': social_id,
-            'email': email,
+            'userId': social_id,
+            'kakaoEmail': email,
         }
         user_view = UserView()
-        login = user_view.get_or_create_user(data=data)
+        login = user_view.create_user(data=data)
 
         response = login_view.object(data=data) if login.status_code == 201 else login
 
@@ -184,7 +184,6 @@ class KakaoCallbackView(APIView):
         token_detail_res = requests.get("https://kapi.kakao.com/v1/user/access_token_info", headers=token_detail_headers)
         token_detail_json = token_detail_res.json()
 
-        print(token_detail_json)
         res = Response({
             "access token" : access_token,
             "token id" : token_detail_json.get('id'),
@@ -197,6 +196,6 @@ class KakaoCallbackView(APIView):
         })
 
         # 회원가입 및 로그인
-        res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+        res = login_api(social_id=social_id, email=user_email)
 
         return res

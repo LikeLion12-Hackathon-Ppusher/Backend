@@ -4,54 +4,58 @@ from rest_framework import serializers
 from .models import User
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(required=True)
-    username = serializers.CharField(required=True)
-    email = serializers.CharField(required=True)
+    userId = serializers.CharField(required=True)
+    # name = serializers.CharField(required=True)
+    # userType = serializers.CharField(required=True)
+    kakaoEmail = serializers.CharField(required=True)
+    # gender = serializers.CharField(required=True)
+
 
     class Meta:
         model = User
-        fields = ['password', 'username', 'email']
+        fields = ['userId','kakaoEmail']
+        # fields = ['userId', 'name', 'kakaoEmail', 'userType', 'gender']
 
-    def save(self, request):
-
+    def create(self, validated_data):
         user = User.objects.create(
-            username=self.validated_data['username'],
-            email=self.validated_data['email'],
+            userId=self.validated_data['userId'],
+            name='test',
+            userType='SY',
+            kakaoEmail=self.validated_data['kakaoEmail'],
+            gender='M'
         )
-                
-                # password 암호화
-        user.set_password(self.validated_data['password'])
-        user.save()
 
         return user
         
     def validate(self, data):
-        email = data.get('email', None)
+        userId = data.get('userId',None)
+        # userType = data.get('userType',None)
+        # gender = data.get('gender',None)
 
-        if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError('email already exists')
-        
+        if User.objects.filter(userId=userId).exists():
+            raise serializers.ValidationError('userId already exists')
+        # if gender not in ('M', 'F'):
+        #     raise serializers.ValidationError('user gender error')
+        # if userType not in ('SY', 'SN'):
+        #     raise serializers.ValidationError('user type error')
+
         return data
 
 class AuthSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True)
+    userId = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['userId']
     
     def validate(self, data):
-        username = data.get("username", None)
-        password = data.get("password", None)
 
-        user = User.get_user_or_none_by_username(username=username)
+        userId = data.get("userId", None)
+
+        user = User.get_user_or_none_by_userId(userId=userId)
 
         if user is None:
             raise serializers.ValidationError("user account not exist")
-        else:
-            if not user.check_password(raw_password=password):
-                raise serializers.ValidationError("wrong password")
 
         token = RefreshToken.for_user(user)
         refresh_token = str(token)
