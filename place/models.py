@@ -33,7 +33,7 @@ class SmokingPlace(models.Model):
     rate = models.CharField(max_length=1, choices=CHOICES)
     ashtray = models.BooleanField()
     
-# class Likes(models.Model):
-#     LikesId = models.AutoField(primary_key=True)
-#     NoSmokingPlaceId = models.ForeignKey(NoSmokingPlace, verbose_name = "NoSmokingField", on_delete=models.CASCADE)
-#     userId = models.ForeignKey(User, verbose_name= "User", on_delete= models.CASCADE)
+class Likes(models.Model):
+    LikesId = models.AutoField(primary_key=True)
+    NoSmokingPlaceId = models.ForeignKey(NoSmokingPlace, verbose_name = "NoSmokingField", on_delete=models.CASCADE)
+    userId = models.ForeignKey(User, verbose_name= "User", on_delete= models.CASCADE)
