@@ -175,7 +175,19 @@ class KakaoCallbackView(APIView):
 
         # 회원가입 및 로그인
         # res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+
+        # token 상세 정보 id, expires_in, app_id
+        token_detail_headers = {
+            "Authorization": access_token
+        }
+        token_detail_res = requests.get("https://kapi.kakao.com/v1/user/access_token_info", headers=token_detail_headers)
+        token_detail_json = token_detail_res.json()
+
+        print(token_detail_json)
         res = Response({
-            "access token" : access_token
+            "access token" : access_token,
+            "token id" : token_detail_json.get('id'),
+            "token expires in" : token_detail_json.get('expires_in'),
+            "token app id" : token_detail_json.get('app_id')
         })
         return res
