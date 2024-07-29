@@ -135,7 +135,7 @@ class KakaoCallbackView(APIView):
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
     def post(self, request):
 
-        data = request.data
+        data = request.body
 
         # access_token 발급 요청
         code = data.get('authorizationCode')
