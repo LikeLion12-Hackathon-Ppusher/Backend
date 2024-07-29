@@ -181,6 +181,7 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'TOKEN_USER_CLASS': 'accounts.User',
+    'USER_ID_FIELD': 'userId' # default = id
 }
 
 KAKAO_CONFIG = {
