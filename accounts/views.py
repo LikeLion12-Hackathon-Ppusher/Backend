@@ -123,11 +123,7 @@ class KakaoCallbackView(APIView):
 
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
     def get(self, request):
-        '''
-        kakao access_token 및 user_info 요청
 
-        ---
-        '''
         data = request.query_params
 
         # access_token 발급 요청
@@ -142,7 +138,6 @@ class KakaoCallbackView(APIView):
             'client_secret': KAKAO_CONFIG['KAKAO_CLIENT_SECRET_KEY'],
             'code': code,
         }
-        print(request_data)
         token_headers = {
             'Content-type': 'application/x-www-form-urlencoded'
         }
@@ -152,7 +147,6 @@ class KakaoCallbackView(APIView):
         access_token = token_json.get('access_token')
 
         if not access_token:
-            print("access_token error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         access_token = f"Bearer {access_token}"  # 'Bearer ' 마지막 띄어쓰기 필수
 
@@ -169,12 +163,8 @@ class KakaoCallbackView(APIView):
 
         kakao_account = user_info_json.get('kakao_account')
         if not kakao_account:
-            print("kakao_account error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         user_email = kakao_account.get('email')
-
-        # 회원가입 및 로그인
-        # res = login_api(social_type=social_type, social_id=social_id, email=user_email)
 
         # token 상세 정보 id, expires_in, app_id
         token_detail_headers = {
@@ -188,6 +178,15 @@ class KakaoCallbackView(APIView):
             "access token" : access_token,
             "token id" : token_detail_json.get('id'),
             "token expires in" : token_detail_json.get('expires_in'),
-            "token app id" : token_detail_json.get('app_id')
+            "token app id" : token_detail_json.get('app_id'),
+
+            "user_unique_id": social_id,
+
+            "kakao_account" : kakao_account
         })
+
+        # 회원가입 및 로그인
+        # res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+
+
         return res
