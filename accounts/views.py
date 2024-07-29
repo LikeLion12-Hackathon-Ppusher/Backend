@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from rest_framework_simplejwt.serializers import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,14 +6,25 @@ from rest_framework import status
 from .serializers import RegisterSerializer, AuthSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import logout
+from config.settings import *
+from .models import User
+import requests
 
-class RegisterView(APIView):
+# kakao 관련 uri
+kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
+kakao_token_uri = "https://kauth.kakao.com/oauth/token"
+kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"
 
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
+
+class UserView(APIView):
+    permission_classes = [AllowAny]
+
+    # data : request.data
+    def create_user(self, data):
+        serializer = RegisterSerializer(data=data)
 
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save(request)
+            user = serializer.create(serializer.validated_data)
             token = RefreshToken.for_user(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
@@ -33,9 +43,16 @@ class RegisterView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class AuthView(APIView):
     def post(self, request):
-        serializer = AuthSerializer(data=request.data)
+        # 계정 조회 및 등록
+        return self.get_or_create_user(data=request.data)
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    # data : request.data
+    def object(self, data):
+        serializer = AuthSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.validated_data["user"]
             access_token = serializer.validated_data["access_token"]
@@ -43,8 +60,8 @@ class AuthView(APIView):
             res = Response(
                 {
                     "user": {
-                        "id": user.id,
-                        "email": user.email,
+                        "userId": user.userId,
+                        "kakaoEmail": user.kakaoEmail,
                     },
                     "message": "login success",
                     "token": {
@@ -59,6 +76,11 @@ class AuthView(APIView):
             return res
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+    def post(self, request):
+        # 로그인
+        return self.object(data=request.data)
+
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
@@ -67,35 +89,27 @@ class LogoutView(APIView):
         logout(request)
         return Response({"message": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
-kakao_login_uri = "https://kauth.kakao.com/oauth/authorize"
-kakao_token_uri = "https://kauth.kakao.com/oauth/token"
-kakao_profile_uri = "https://kapi.kakao.com/v2/user/me"
 
-from config.settings import *
-from .models import User
-import requests
+def login_api(social_id: str, email: str=None, phone: str=None):
 
-def login_api(social_type: str, social_id: str, email: str=None, phone: str=None):
-    '''
-    회원가입 및 로그인
-    '''
-    login_view = AuthView()
+    # 회원가입 및 로그인
+    login_view = LoginView()
     try:
-        User.objects.get(social_id=social_id)
+        User.objects.get(userId=social_id)
         data = {
-            'social_id': social_id,
-            'email': email,
+            'userId': social_id,
+            'kakaoEmail': email,
         }
         response = login_view.object(data=data)
 
     except User.DoesNotExist:
+        print("없는 유저에요~")
         data = {
-            'social_type': social_type,
-            'social_id': social_id,
-            'email': email,
+            'userId': social_id,
+            'kakaoEmail': email,
         }
-        user_view = AuthView()
-        login = user_view.get_or_create_user(data=data)
+        user_view = UserView()
+        login = user_view.create_user(data=data)
 
         response = login_view.object(data=data) if login.status_code == 201 else login
 
@@ -106,11 +120,8 @@ class KakaoLoginView(APIView):
     permission_classes = [AllowAny,]
 
     def get(self, request):
-        '''
-        kakao code 요청
 
-        ---
-        '''
+        # kakao code 요청
         client_id = KAKAO_CONFIG['KAKAO_REST_API_KEY']
         redirect_uri = KAKAO_CONFIG['KAKAO_REDIRECT_URI']
         uri = f"{kakao_login_uri}?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
@@ -123,11 +134,7 @@ class KakaoCallbackView(APIView):
 
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
     def get(self, request):
-        '''
-        kakao access_token 및 user_info 요청
 
-        ---
-        '''
         data = request.query_params
 
         # access_token 발급 요청
@@ -142,7 +149,6 @@ class KakaoCallbackView(APIView):
             'client_secret': KAKAO_CONFIG['KAKAO_CLIENT_SECRET_KEY'],
             'code': code,
         }
-        print(request_data)
         token_headers = {
             'Content-type': 'application/x-www-form-urlencoded'
         }
@@ -152,7 +158,6 @@ class KakaoCallbackView(APIView):
         access_token = token_json.get('access_token')
 
         if not access_token:
-            print("access_token error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         access_token = f"Bearer {access_token}"  # 'Bearer ' 마지막 띄어쓰기 필수
 
@@ -169,13 +174,28 @@ class KakaoCallbackView(APIView):
 
         kakao_account = user_info_json.get('kakao_account')
         if not kakao_account:
-            print("kakao_account error")
             return Response(status=status.HTTP_400_BAD_REQUEST)
         user_email = kakao_account.get('email')
 
-        # 회원가입 및 로그인
-        # res = login_api(social_type=social_type, social_id=social_id, email=user_email)
+        # token 상세 정보 id, expires_in, app_id
+        token_detail_headers = {
+            "Authorization": access_token
+        }
+        token_detail_res = requests.get("https://kapi.kakao.com/v1/user/access_token_info", headers=token_detail_headers)
+        token_detail_json = token_detail_res.json()
+
         res = Response({
-            "access token" : access_token
+            "access token" : access_token,
+            "token id" : token_detail_json.get('id'),
+            "token expires in" : token_detail_json.get('expires_in'),
+            "token app id" : token_detail_json.get('app_id'),
+
+            "user_unique_id": social_id,
+
+            "kakao_account" : kakao_account
         })
+
+        # 회원가입 및 로그인
+        res = login_api(social_id=social_id, email=user_email)
+
         return res
