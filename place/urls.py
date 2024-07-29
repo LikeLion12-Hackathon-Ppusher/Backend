@@ -5,10 +5,10 @@ from place.views import *
 
 urlpatterns = [
     path('smoking', SmokingPlaceList.as_view()),
-    path('smoking/<id>', SmokingPlaceDetail.as_view()),
+    path('smoking/<int:id>', SmokingPlaceDetail.as_view()),
     path('nosmoking', NoSmokingPlaceList.as_view()),
-    path('nosmoking/<id>', SmokingPlaceDetail.as_view()),
+    path('nosmoking/<int:id>', SmokingPlaceDetail.as_view()),
     path('shsmoking', SecondhandSmokingPlaceList.as_view()),
-    path('shsmoking/likes', SecondhandSmokingPlaceLikes.as_view()),
-    path('shsmoking/<id>',SecondhandSmokingPlaceDetail.as_view()),
+    path('shsmoking/<int:id>/likes', SecondhandSmokingPlaceLikes.as_view()),
+    path('shsmoking/<int:id>',SecondhandSmokingPlaceDetail.as_view()),
 ]

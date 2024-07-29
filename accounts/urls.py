@@ -8,10 +8,6 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    # 회원가입/로그인/로그아웃
-    path("join/", UserView.as_view()),
-    path("login/", LoginView.as_view()),
-    path("logout/", LogoutView.as_view()),
     # 토큰
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
@@ -19,5 +15,4 @@ urlpatterns = [
     # kakao
     path('kakao/login/', KakaoLoginView.as_view()),
     path('kakao/callback/', KakaoCallbackView.as_view()),
-
 ]
