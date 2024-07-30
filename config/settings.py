@@ -187,7 +187,7 @@ SIMPLE_JWT = {
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY": get_secret("KAKAO_REST_API_KEY"),
-    "KAKAO_REDIRECT_URI": "http://https://wellnesstour.netlify.app/oauth",
+    "KAKAO_REDIRECT_URI": "https://wellnesstour.netlify.app/oauth",
     "KAKAO_CLIENT_SECRET_KEY": get_secret("KAKAO_CLIENT_SECRET_KEY"), 
 }
 
