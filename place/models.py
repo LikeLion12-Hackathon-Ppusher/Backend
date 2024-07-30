@@ -1,25 +1,24 @@
 from django.db import models
-from accounts.models import *
+from accounts.models import User
 
 class Place(models.Model):
-    placeId = models.AutoField(primary_key=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
     imageUrl = models.URLField()
 
-class SecondhandSmokingPlace(models.Model):
+    class Meta:
+        abstract = True
+
+class SecondhandSmokingPlace(Place):
     SecondhandSmokingPlaceId = models.AutoField(primary_key=True)
-    placeId = models.ForeignKey(Place, verbose_name = "Place", on_delete=models.CASCADE)
     likes = models.PositiveIntegerField(default=0)
 
-class NoSmokingPlace(models.Model):
+class NoSmokingPlace(Place):
     NoSmokingPlaceId = models.AutoField(primary_key=True)
-    placeId = models.ForeignKey(Place, verbose_name = "Place", on_delete=models.CASCADE)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
 
-class SmokingPlace(models.Model):
+class SmokingPlace(Place):
     CHOICES = (
         ('1', '1'),
         ('2', '2'),
@@ -29,11 +28,11 @@ class SmokingPlace(models.Model):
     )
     
     SmokingPlaceId = models.AutoField(primary_key=True)
-    placeId = models.ForeignKey(Place, verbose_name = "Place", on_delete=models.CASCADE)
     rate = models.CharField(max_length=1, choices=CHOICES)
     ashtray = models.BooleanField()
-    
+    isIndoor = models.BooleanField()
+
 class Likes(models.Model):
     LikesId = models.AutoField(primary_key=True)
-    NoSmokingPlaceId = models.ForeignKey(NoSmokingPlace, verbose_name = "NoSmokingField", on_delete=models.CASCADE)
-    userId = models.ForeignKey(User, verbose_name= "User", on_delete= models.CASCADE)
+    NoSmokingPlaceId = models.ForeignKey(NoSmokingPlace, verbose_name="NoSmokingPlace", on_delete=models.CASCADE)
+    userId = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
