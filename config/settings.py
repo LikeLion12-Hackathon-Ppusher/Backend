@@ -43,7 +43,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '3.38.250.108']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -88,6 +88,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://wellnesstour.netlify.app"
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -186,7 +187,7 @@ SIMPLE_JWT = {
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY": get_secret("KAKAO_REST_API_KEY"),
-    "KAKAO_REDIRECT_URI": "http://localhost:8000/oauth/kakao/callback/",
+    "KAKAO_REDIRECT_URI": "http://https://wellnesstour.netlify.app/oauth",
     "KAKAO_CLIENT_SECRET_KEY": get_secret("KAKAO_CLIENT_SECRET_KEY"), 
 }
 
