@@ -133,12 +133,16 @@ class KakaoCallbackView(APIView):
     permission_classes = [AllowAny]
 
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
-    def post(self, request):
-
-        data = request.body
-
+    # 서버에서는 get -> post
+    def get(self, request):
+        
+        data = request.query_params
+        
         # access_token 발급 요청
-        code = data.get('authorizationCode')
+        ## 서버용 코드
+        # data = request.data
+        # code = data.get('authorizationCode')
+        code = data.get('code')
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         print(code)
