@@ -186,6 +186,8 @@ SIMPLE_JWT = {
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY": get_secret("KAKAO_REST_API_KEY"),
+    # 서버용
+    # "KAKAO_REDIRECT_URI": "http://localhost:3000/oauth"
     "KAKAO_REDIRECT_URI": "http://localhost:8000/oauth/kakao/callback/",
     "KAKAO_CLIENT_SECRET_KEY": get_secret("KAKAO_CLIENT_SECRET_KEY"), 
 }
