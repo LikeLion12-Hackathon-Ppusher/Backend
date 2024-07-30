@@ -38,13 +38,3 @@ class SecondhandSmokingPlaceSerializer(serializers.ModelSerializer):
             # 모델에서 어떤 필드를 가져올지
             # 전부 가져오고 싶을 때
         fields = "__all__"
-
-class SecondhandSmokingPlaceLikesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Likes
-
-        fields = "__all__"
-    def validate(self, userId, like):
-        # 만약 이미 해당 like 객체에 userId가 있다면 제거하고, 없다면 추가함
-        if Likes.objects.get()
