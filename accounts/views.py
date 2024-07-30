@@ -61,17 +61,19 @@ class LoginView(APIView):
                 {
                     "user": {
                         "userId": user.userId,
-                        "kakaoEmail": user.kakaoEmail,
+                        "userName" : user.name,
+                        "userType": user.userType,
+                    },
+                    "setting" : {
+                        "distance" : user.distance,
+                        "time" : user.time,
+                        "option" : user.option
                     },
                     "message": "login success",
-                    "token": {
-                        "access_token": access_token,
-                        "refresh_token": refresh_token,
-                    },
+                    "access_token": access_token,
                 },
                 status=status.HTTP_200_OK,
             )
-            # res.set_cookie("access-token", access_token, httponly=True)
             res.set_cookie("refresh-token", refresh_token, httponly=True)
             return res
         else:
@@ -133,16 +135,12 @@ class KakaoCallbackView(APIView):
     permission_classes = [AllowAny]
 
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
-    # 서버에서는 get -> post
-    def get(self, request):
-        
-        data = request.query_params
+    def post(self, request):
         
         # access_token 발급 요청
-        ## 서버용 코드
-        # data = request.data
-        # code = data.get('authorizationCode')
-        code = data.get('code')
+        data = request.data
+        code = data.get('authorizationCode')
+
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         print(code)
@@ -168,9 +166,7 @@ class KakaoCallbackView(APIView):
         # kakao 회원정보 요청
         auth_headers = {
             "Authorization": access_token,
-            # 서버용
-            # "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-            "Content-type": "application/x-www-form-urlencoded",
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
         }
         user_info_res = requests.get(kakao_profile_uri, headers=auth_headers)
         user_info_json = user_info_res.json()
