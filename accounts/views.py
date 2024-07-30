@@ -168,7 +168,9 @@ class KakaoCallbackView(APIView):
         # kakao 회원정보 요청
         auth_headers = {
             "Authorization": access_token,
-            "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            # 서버용
+            # "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+            "Content-type": "application/x-www-form-urlencoded",
         }
         user_info_res = requests.get(kakao_profile_uri, headers=auth_headers)
         user_info_json = user_info_res.json()
