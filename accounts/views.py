@@ -71,7 +71,7 @@ class LoginView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-            res.set_cookie("access-token", access_token, httponly=True)
+            # res.set_cookie("access-token", access_token, httponly=True)
             res.set_cookie("refresh-token", refresh_token, httponly=True)
             return res
         else:
@@ -103,7 +103,6 @@ def login_api(social_id: str, email: str=None, phone: str=None):
         response = login_view.object(data=data)
 
     except User.DoesNotExist:
-        print("없는 유저에요~")
         data = {
             'userId': social_id,
             'kakaoEmail': email,
@@ -112,6 +111,7 @@ def login_api(social_id: str, email: str=None, phone: str=None):
         login = user_view.create_user(data=data)
 
         response = login_view.object(data=data) if login.status_code == 201 else login
+        response.status_code = 201
 
     return response
 
