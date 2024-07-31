@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 
 class Place(models.Model):
+    placeId = models.AutoField(primary_key=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     name = models.CharField(max_length=255)
@@ -12,11 +13,10 @@ class Place(models.Model):
         abstract = True
 
 class SecondhandSmokingPlace(Place):
-    SecondhandSmokingPlaceId = models.AutoField(primary_key=True)
     likes = models.PositiveIntegerField(default=0)
 
 class NoSmokingPlace(Place):
-    NoSmokingPlaceId = models.AutoField(primary_key=True)
+    pass
 
 class SmokingPlace(Place):
     CHOICES = (
@@ -27,7 +27,6 @@ class SmokingPlace(Place):
         ('5', '5')
     )
     
-    SmokingPlaceId = models.AutoField(primary_key=True)
     rate = models.CharField(max_length=1, choices=CHOICES)
     ashtray = models.BooleanField()
     isIndoor = models.BooleanField()
