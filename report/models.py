@@ -1,6 +1,6 @@
 from django.db import models
-from place.models import *
-from accounts.models import *
+from place.models import SmokingPlace, SecondhandSmokingPlace
+from accounts.models import User
 
 class Report(models.Model):
     CHOICES = (
@@ -11,9 +11,10 @@ class Report(models.Model):
     reportId = models.AutoField(primary_key=True)
 
     # FK
-    placeId = models.ForeignKey(Place, verbose_name="Place", on_delete=models.CASCADE)
+    smokingPlace = models.ForeignKey(SmokingPlace, null=True, blank=True, on_delete=models.CASCADE)
+    secondhandSmokingPlace = models.ForeignKey(SecondhandSmokingPlace, null=True, blank=True, on_delete=models.CASCADE)
     userId = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
 
     # field
-    description = models.TextField(verbose_name = "Description", max_length=100)
+    description = models.TextField(verbose_name="Description", max_length=100)
     reportType = models.CharField(choices=CHOICES, max_length=2)
