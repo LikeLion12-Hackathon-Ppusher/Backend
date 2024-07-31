@@ -61,17 +61,19 @@ class LoginView(APIView):
                 {
                     "user": {
                         "userId": user.userId,
-                        "kakaoEmail": user.kakaoEmail,
+                        "userName" : user.name,
+                        "userType": user.userType,
+                    },
+                    "setting" : {
+                        "distance" : user.distance,
+                        "time" : user.time,
+                        "option" : user.option
                     },
                     "message": "login success",
-                    "token": {
-                        "access_token": access_token,
-                        "refresh_token": refresh_token,
-                    },
+                    "access_token": access_token,
                 },
                 status=status.HTTP_200_OK,
             )
-            res.set_cookie("access-token", access_token, httponly=True)
             res.set_cookie("refresh-token", refresh_token, httponly=True)
             return res
         else:
@@ -103,7 +105,6 @@ def login_api(social_id: str, email: str=None, phone: str=None):
         response = login_view.object(data=data)
 
     except User.DoesNotExist:
-        print("없는 유저에요~")
         data = {
             'userId': social_id,
             'kakaoEmail': email,
@@ -112,6 +113,7 @@ def login_api(social_id: str, email: str=None, phone: str=None):
         login = user_view.create_user(data=data)
 
         response = login_view.object(data=data) if login.status_code == 201 else login
+        response.status_code = 201
 
     return response
 
@@ -133,16 +135,12 @@ class KakaoCallbackView(APIView):
     permission_classes = [AllowAny]
 
     # @swagger_auto_schema(query_serializer=CallbackUserInfoSerializer)
-    # 서버에서는 get -> post
-    def get(self, request):
-        
-        data = request.query_params
+    def post(self, request):
         
         # access_token 발급 요청
-        ## 서버용 코드
-        # data = request.data
-        # code = data.get('authorizationCode')
-        code = data.get('code')
+        data = request.data
+        code = data.get('authorizationCode')
+
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         print(code)

@@ -15,4 +15,5 @@ urlpatterns = [
     # kakao
     path('kakao/login/', KakaoLoginView.as_view()),
     path('kakao/callback/', KakaoCallbackView.as_view()),
+    path('logout/', LogoutView.as_view())
 ]
