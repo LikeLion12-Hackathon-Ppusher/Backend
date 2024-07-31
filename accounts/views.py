@@ -213,14 +213,13 @@ class MyPage(APIView):
 
 class MyReports(APIView):
     def get(self, request):
-        user = get_object_or_404(User, userId=request.user.userId)
-        reports = user.reports.all()  
+        reports = Report.objects.filter(userId=request.user)
         serializer = ReportSerializer(reports, many=True)
         return Response(serializer.data)
 
 class ReportDetail(APIView):
     def get(self, request, reportId):
-        report = get_object_or_404(Report, id=reportId, user=request.user)
+        report = get_object_or_404(Report, reportId=reportId, userId=request.user)
         serializer = ReportSerializer(report)
         return Response(serializer.data)
 
