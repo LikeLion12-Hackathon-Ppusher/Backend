@@ -1,13 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from rest_framework_simplejwt.serializers import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer, AuthSerializer
+
+from report.serializers import ReportSerializer
+from .serializers import UserSerializer, RegisterSerializer, AuthSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import logout
 from config.settings import *
 from .models import User
+from report.models import *
 import requests
 
 # kakao 관련 uri
@@ -201,3 +204,38 @@ class KakaoCallbackView(APIView):
         res = login_api(social_id=social_id, email=user_email)
 
         return res
+    
+class MyPage(APIView):
+    def get(self, request):
+        user = get_object_or_404(User, userId=request.user.userId)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class MyReports(APIView):
+    def get(self, request):
+        user = get_object_or_404(User, userId=request.user.userId)
+        reports = user.reports.all()  
+        serializer = ReportSerializer(reports, many=True)
+        return Response(serializer.data)
+
+class ReportDetail(APIView):
+    def get(self, request, reportId):
+        report = get_object_or_404(Report, id=reportId, user=request.user)
+        serializer = ReportSerializer(report)
+        return Response(serializer.data)
+
+class ChangeUserType(APIView):
+    def put(self, request):
+        user = get_object_or_404(User, userId=request.user.userId)
+        user.userType = request.data.get('userType', user.userType)
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class ChangeAlarmOption(APIView):
+    def put(self, request):
+        user = get_object_or_404(User, userId=request.user.userId)
+        user.option = request.data.get('option', user.option)
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)

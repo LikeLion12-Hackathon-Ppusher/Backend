@@ -15,5 +15,11 @@ urlpatterns = [
     # kakao
     path('kakao/login/', KakaoLoginView.as_view()),
     path('kakao/callback/', KakaoCallbackView.as_view()),
-    path('logout/', LogoutView.as_view())
+    path('logout/', LogoutView.as_view()),
+    #마이페이지
+    path('user/mypage', MyPage.as_view(), name='mypage'),
+    path('user/mypage/report', MyReports.as_view(), name='my_reports'),
+    path('user/mypage/report/<int:reportId>', ReportDetail.as_view(), name='report_detail'),
+    path('user/mypage/type', ChangeUserType.as_view(), name='change_user_type'),
+    path('user/mypage/alarm', ChangeAlarmOption.as_view(), name='change_alarm_option'),
 ]
