@@ -23,9 +23,9 @@ class PlaceReport(APIView):
                 }
                 
                 if report.reportType == 'SM':
-                    response_data["placeId"] = report.smokingPlace.SmokingPlaceId
+                    response_data["placeId"] = report.smokingPlace.placeId
                 elif report.reportType == 'SH':
-                    response_data["placeId"] = report.secondhandSmokingPlace.SecondhandSmokingPlaceId
+                    response_data["placeId"] = report.secondhandSmokingPlace.placeId
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
             except Exception as e:
