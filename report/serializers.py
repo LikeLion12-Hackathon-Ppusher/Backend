@@ -11,18 +11,18 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = ['reportId', 'smokingPlace', 'secondhandSmokingPlace', 'userId', 'description', 'reportType']
 
-    def create(self, validated_data):
-        report_type = validated_data.get('reportType')
+        def create(self, validated_data):
+            report_type = validated_data.get('reportType')
 
-        if report_type == 'SM':
-            place_data = validated_data.pop('smokingPlace', None)
-            if place_data:
-                place = SmokingPlace.objects.create(**place_data)
-                validated_data['smokingPlace'] = place
-        elif report_type == 'SH':
-            place_data = validated_data.pop('secondhandSmokingPlace', None)
-            if place_data:
-                place = SecondhandSmokingPlace.objects.create(**place_data)
-                validated_data['secondhandSmokingPlace'] = place
+            if report_type == 'SM':
+                place_id = validated_data.pop('smokingPlace', None)
+                if place_id:
+                    place = SmokingPlace.objects.get(id=place_id['id'])
+                    validated_data['smokingPlace'] = place
+            elif report_type == 'SH':
+                place_id = validated_data.pop('secondhandSmokingPlace', None)
+                if place_id:
+                    place = SecondhandSmokingPlace.objects.get(id=place_id['id'])
+                    validated_data['secondhandSmokingPlace'] = place
 
-        return Report.objects.create(**validated_data)
+            return Report.objects.create(**validated_data)
