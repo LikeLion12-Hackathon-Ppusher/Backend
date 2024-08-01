@@ -24,8 +24,8 @@ class User(AbstractBaseUser):
         (1 ,'5분'),
         (2, '10분')
     )
-
-    userId = models.CharField(primary_key=True, max_length=15)
+    id = models.AutoField(primary_key=True)
+    userId = models.CharField(unique=True, max_length=20)
     userType = models.CharField(choices=USER_TYPE, max_length=2)
     kakaoEmail = models.EmailField(unique=True)
     name = models.CharField(max_length=10)
@@ -36,9 +36,21 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'userId'
 
+    class Meta:
+        db_table = 'accounts_user'
+
     @staticmethod
     def get_user_or_none_by_userId(userId):
         try:
-            return User.objects.get(userId=userId)
-        except Exception:
+            user = User.objects.get(userId=userId)
+            return user
+        except User.DoesNotExist:
+            return None
+
+    @staticmethod
+    def get_user_or_none_by_userEmail(email):
+        try:
+            user = User.objects.get(kakaoEmail=email)
+            return user
+        except User.DoesNotExist:
             return None

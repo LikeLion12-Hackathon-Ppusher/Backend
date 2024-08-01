@@ -16,16 +16,16 @@ class PlaceReport(APIView):
 
                 response_data = {
                     "reportId": report.reportId,
-                    "userId": report.userId.id,
+                    "userId": report.userId.userId,
                     "description": report.description,
                     "reportType": report.reportType,
                     "message": message,
                 }
                 
-                if report.reportType == 'SM':
-                    response_data["placeId"] = report.smokingPlace.SmokingPlaceId
+                if report.reportType == 'SM' :
+                    response_data["placeId"] = report.smokingPlace_id
                 elif report.reportType == 'SH':
-                    response_data["placeId"] = report.secondhandSmokingPlace.SecondhandSmokingPlaceId
+                    response_data["placeId"] = report.secondhandSmokingPlace_id
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
             except Exception as e:
