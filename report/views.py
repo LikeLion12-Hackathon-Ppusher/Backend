@@ -22,7 +22,7 @@ class PlaceReport(APIView):
                     "message": message,
                 }
                 
-                if report.reportType == 'SM':
+                if report.reportType == 'SM' :
                     response_data["placeId"] = report.smokingPlace_id
                 elif report.reportType == 'SH':
                     response_data["placeId"] = report.secondhandSmokingPlace_id
