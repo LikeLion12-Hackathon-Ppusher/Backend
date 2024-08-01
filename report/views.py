@@ -16,15 +16,15 @@ class PlaceReport(APIView):
 
                 response_data = {
                     "reportId": report.reportId,
-                    "userId": report.userId.id,
+                    "userId": report.userId.userId,
                     "description": report.description,
                     "reportType": report.reportType,
                     "message": message,
                 }
                 
-                if report.reportType == 'SM' and report.smokingPlace:
+                if report.reportType == 'SM':
                     response_data["placeId"] = report.smokingPlace.SmokingPlaceId
-                elif report.reportType == 'SH' and report.secondhandSmokingPlace:
+                elif report.reportType == 'SH':
                     response_data["placeId"] = report.secondhandSmokingPlace.SecondhandSmokingPlaceId
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
