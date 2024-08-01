@@ -3,22 +3,21 @@ from accounts.models import User
 
 class Place(models.Model):
     placeId = models.AutoField(primary_key=True)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(default=0.0)
+    longitude = models.FloatField(default=0.0)
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    imageUrl = models.URLField()
+    imageUrl = models.URLField(default="")
 
-    class Meta:
-        abstract = True
-
-class SecondhandSmokingPlace(Place):
+class SecondhandSmokingPlace(models.Model):
+    place = models.OneToOneField(Place, on_delete=models.CASCADE, primary_key=True, db_column='placeId')
     likes = models.PositiveIntegerField(default=0)
 
-class NoSmokingPlace(Place):
-    pass
+class NoSmokingPlace(models.Model):
+    place = models.OneToOneField(Place, on_delete=models.CASCADE, primary_key=True, db_column='placeId')
 
-class SmokingPlace(Place):
+class SmokingPlace(models.Model):
+    place = models.OneToOneField(Place, on_delete=models.CASCADE, primary_key=True, db_column='placeId')
     CHOICES = (
         ('1', '1'),
         ('2', '2'),
@@ -26,7 +25,6 @@ class SmokingPlace(Place):
         ('4', '4'),
         ('5', '5')
     )
-    
     rate = models.CharField(max_length=1, choices=CHOICES)
     ashtray = models.BooleanField()
     isIndoor = models.BooleanField()
