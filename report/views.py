@@ -22,9 +22,9 @@ class PlaceReport(APIView):
                     "message": message,
                 }
                 
-                if report.reportType == 'SM':
+                if report.reportType == 'SM' and report.smokingPlace:
                     response_data["placeId"] = report.smokingPlace.SmokingPlaceId
-                elif report.reportType == 'SH':
+                elif report.reportType == 'SH' and report.secondhandSmokingPlace:
                     response_data["placeId"] = report.secondhandSmokingPlace.SecondhandSmokingPlaceId
 
                 return Response(response_data, status=status.HTTP_201_CREATED)
