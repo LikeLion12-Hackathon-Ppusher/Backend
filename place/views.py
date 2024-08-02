@@ -141,7 +141,7 @@ class SecondhandSmokingPlaceLikes(APIView):
         else:
             likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
             likeplace.likesCount -= 1
-            like.delete()
+            Likes.objects.filter(SecondHandSmokingPlaceId = id, userId = request.user).delete()
             
             return Response(status=status.HTTP_204_NO_CONTENT)
 
