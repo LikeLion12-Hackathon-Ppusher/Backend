@@ -20,7 +20,7 @@ class ReportSmokingPlaceList(APIView):
     def get(self, request, format=None):
         reportSmokingplaces = ReportSmokingPlace.objects.all()
         # To serialize many posts, use (many=True)
-        serializer = SmokingPlaceSerializer(reportSmokingplaces, many=True)
+        serializer = ReportSmokingPlaceSerializer(reportSmokingplaces, many=True)
         return Response(serializer.data)
 
 class ReportSmokingPlaceDetail(APIView):
