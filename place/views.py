@@ -129,9 +129,9 @@ class SecondhandSmokingPlaceLikes(APIView):
         # 만약 이미 해당 like 객체에 해당 장소에 대해 userId가 있다면 제거하고, 없다면 추가함
         if like is False:
             # 생성
-            likeplace = SecondhandSmokingPlace.objects.get(SecondhandSmokingPlaceId = id)
+            likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
             likeplace.likesCount += 1
-            
+
             like = Likes.objects.create(
                 SecondHandSmokingPlaceId = likeplace,
                 userId = request.user
