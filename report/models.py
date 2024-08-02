@@ -1,5 +1,5 @@
 from django.db import models
-from place.models import SmokingPlace, SecondhandSmokingPlace
+from place.models import ReportSmokingPlace, SecondhandSmokingPlace
 from accounts.models import User
 
 class Report(models.Model):
@@ -11,7 +11,7 @@ class Report(models.Model):
     reportId = models.AutoField(primary_key=True)
 
     # FK
-    smokingPlace = models.ForeignKey(SmokingPlace, null=True, blank=True, on_delete=models.CASCADE)
+    reportSmokingPlace = models.ForeignKey(ReportSmokingPlace, null=True, blank=True, on_delete=models.CASCADE)
     secondhandSmokingPlace = models.ForeignKey(SecondhandSmokingPlace, null=True, blank=True, on_delete=models.CASCADE)
     userId = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
 
