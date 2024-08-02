@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import Report
 from place.models import ReportSmokingPlace, SecondhandSmokingPlace, Likes
-from place.serializers import SmokingPlaceSerializer, SecondhandSmokingPlaceSerializer
+from place.serializers import ReportSmokingPlaceSerializer, SecondhandSmokingPlaceSerializer
 
 class ReportSerializer(serializers.ModelSerializer):
-    smokingPlace = SmokingPlaceSerializer(required=False)
+    reportSmokingPlace = ReportSmokingPlaceSerializer(required=False)
     secondhandSmokingPlace = SecondhandSmokingPlaceSerializer(required=False)
 
     class Meta:
