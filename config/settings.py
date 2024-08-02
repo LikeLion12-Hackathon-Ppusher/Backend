@@ -126,6 +126,20 @@ DATABASES = {
 }
 
 
+# DATABASES = {
+# 	'default': {
+# 		'ENGINE': 'django.db.backends.mysql',
+# 		'NAME': get_secret("DB_NAME"),
+# 		'USER': 'admin', # root로 접속하여 DB를 만들었다면 'root'
+# 		'PASSWORD': get_secret("DB_PASSWORD"),
+# 		'HOST': "127.0.0.1",
+# 		'PORT': '3306',
+# 	}
+# }
+
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
