@@ -125,14 +125,13 @@ class SecondhandSmokingPlaceDetail(APIView):
     
 class SecondhandSmokingPlaceLikes(APIView):
     def post(self, request, id):
-        userId = request.data.get("userId",None)
-        like = get_object_or_404(Likes, NoSmokingPlaceId = id, userId_id = userId)
+        like = Likes.objects.get(SecondHandSmokingPlaceId = id, userId = request.id)
         # 만약 이미 해당 like 객체에 해당 장소에 대해 userId가 있다면 제거하고, 없다면 추가함
         if like is None:
             # 생성
             like = Likes.objects.create(
                 NoSmokingPlaceId_id = id,
-                userId_id = userId
+                userId_id = request.id
             )
             return Response({
                 "like" : like
