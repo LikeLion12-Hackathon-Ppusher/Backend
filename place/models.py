@@ -13,7 +13,7 @@ class Place(models.Model):
 
 class SecondhandSmokingPlace(Place):
     placeId = models.AutoField(primary_key=True)
-    likes = models.PositiveIntegerField(default=0)
+    likesCount = models.PositiveIntegerField(default=0)
 
 class NoSmokingPlace(Place):
     placeId = models.AutoField(primary_key=True)
@@ -34,5 +34,5 @@ class SmokingPlace(Place):
 
 class Likes(models.Model):
     LikesId = models.AutoField(primary_key=True)
-    NoSmokingPlaceId = models.ForeignKey(NoSmokingPlace, verbose_name="NoSmokingPlace", on_delete=models.CASCADE)
+    SecondHandSmokingPlaceId = models.ForeignKey(SecondhandSmokingPlace, verbose_name="NoSmokingPlace", on_delete=models.CASCADE)
     userId = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
