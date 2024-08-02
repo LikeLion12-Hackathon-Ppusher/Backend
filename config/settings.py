@@ -115,49 +115,49 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # ssh 터널링
 
 
-if os.getenv('RUN_MAIN') == 'true':
-    from sshtunnel import SSHTunnelForwarder
-    # SSH 터널 설정
-    SSH_HOST = 'ec2-3-38-250-108.ap-northeast-2.compute.amazonaws.com'
-    SSH_USER = 'ubuntu'
-    SSH_PRIVATE_KEY = '/Users/kwonminhyeok/Desktop/LIKELION_CAU/hackathon/LikeLion12_hackathon.pem'
-    RDS_HOST = 'bbuhackathon.clco8q60opsx.ap-northeast-2.rds.amazonaws.com'
-    RDS_PORT = 3306
-    LOCAL_PORT = 3306  # 로컬 머신에서 사용할 포트
+# if os.getenv('RUN_MAIN') == 'true':
+#     from sshtunnel import SSHTunnelForwarder
+#     # SSH 터널 설정
+#     SSH_HOST = 'ec2-3-38-250-108.ap-northeast-2.compute.amazonaws.com'
+#     SSH_USER = 'ubuntu'
+#     SSH_PRIVATE_KEY = '/Users/kwonminhyeok/Desktop/LIKELION_CAU/hackathon/LikeLion12_hackathon.pem'
+#     RDS_HOST = 'bbuhackathon.clco8q60opsx.ap-northeast-2.rds.amazonaws.com'
+#     RDS_PORT = 3306
+#     LOCAL_PORT = 3306  # 로컬 머신에서 사용할 포트
 
-    # SSH 터널 시작
-    server = SSHTunnelForwarder(
-        (SSH_HOST, 22),
-        ssh_username=SSH_USER,
-        ssh_private_key=SSH_PRIVATE_KEY,
-        remote_bind_address=(RDS_HOST, RDS_PORT),
-        local_bind_address=('127.0.0.1', LOCAL_PORT)
-    )
+#     # SSH 터널 시작
+#     server = SSHTunnelForwarder(
+#         (SSH_HOST, 22),
+#         ssh_username=SSH_USER,
+#         ssh_private_key=SSH_PRIVATE_KEY,
+#         remote_bind_address=(RDS_HOST, RDS_PORT),
+#         local_bind_address=('127.0.0.1', LOCAL_PORT)
+#     )
 
-    server.start()
+#     server.start()
 
-    import atexit
-    atexit.register(server.stop)
+#     import atexit
+#     atexit.register(server.stop)
 
-# from sshtunnel import SSHTunnelForwarder
-# # SSH 터널 설정
-# SSH_HOST = 'ec2-3-38-250-108.ap-northeast-2.compute.amazonaws.com'
-# SSH_USER = 'ubuntu'
-# SSH_PRIVATE_KEY = '/Users/kwonminhyeok/Desktop/LIKELION_CAU/hackathon/LikeLion12_hackathon.pem'
-# RDS_HOST = 'bbuhackathon.clco8q60opsx.ap-northeast-2.rds.amazonaws.com'
-# RDS_PORT = 3306
-# LOCAL_PORT = 3306  # 로컬 머신에서 사용할 포트
+from sshtunnel import SSHTunnelForwarder
+# SSH 터널 설정
+SSH_HOST = 'ec2-3-38-250-108.ap-northeast-2.compute.amazonaws.com'
+SSH_USER = 'ubuntu'
+SSH_PRIVATE_KEY = '/Users/kwonminhyeok/Desktop/LIKELION_CAU/hackathon/LikeLion12_hackathon.pem'
+RDS_HOST = 'bbuhackathon.clco8q60opsx.ap-northeast-2.rds.amazonaws.com'
+RDS_PORT = 3306
+LOCAL_PORT = 3306  # 로컬 머신에서 사용할 포트
 
-# # SSH 터널 시작
-# server = SSHTunnelForwarder(
-#     (SSH_HOST, 22),
-#     ssh_username=SSH_USER,
-#     ssh_private_key=SSH_PRIVATE_KEY,
-#     remote_bind_address=(RDS_HOST, RDS_PORT),
-#     local_bind_address=('127.0.0.1', LOCAL_PORT)
-# )
+# SSH 터널 시작
+server = SSHTunnelForwarder(
+    (SSH_HOST, 22),
+    ssh_username=SSH_USER,
+    ssh_private_key=SSH_PRIVATE_KEY,
+    remote_bind_address=(RDS_HOST, RDS_PORT),
+    local_bind_address=('127.0.0.1', LOCAL_PORT)
+)
 
-# server.start()
+server.start()
 
 
 DATABASES = {
@@ -171,11 +171,11 @@ DATABASES = {
 	}
 }
 
-# def close_ssh_tunnel():
-#     server.stop()
+def close_ssh_tunnel():
+    server.stop()
 
-# import atexit
-# atexit.register(close_ssh_tunnel)
+import atexit
+atexit.register(close_ssh_tunnel)
 
 
 # Password validation
