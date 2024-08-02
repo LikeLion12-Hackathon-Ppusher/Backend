@@ -127,7 +127,7 @@ class SecondhandSmokingPlaceLikes(APIView):
     def post(self, request, id):
         like = Likes.objects.filter(SecondHandSmokingPlaceId = id, userId = request.user).exists()
         # 만약 이미 해당 like 객체에 해당 장소에 대해 userId가 있다면 제거하고, 없다면 추가함
-        if like is None:
+        if like is False:
             # 생성
             like = Likes.objects.create(
                 SecondHandSmokingPlaceId = id,
