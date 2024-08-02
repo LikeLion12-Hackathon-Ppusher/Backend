@@ -24,7 +24,7 @@ class PlaceReport(APIView):
                 }
                 
                 if report.reportType == 'SM' :
-                    response_data["placeId"] = report.smokingPlace_id
+                    response_data["placeId"] = report.reportSmokingPlace_id
                 elif report.reportType == 'SH':
                     response_data["placeId"] = report.secondhandSmokingPlace_id
 
