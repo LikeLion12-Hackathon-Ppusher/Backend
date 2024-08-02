@@ -130,13 +130,18 @@ class SecondhandSmokingPlaceLikes(APIView):
         if like is None:
             # 생성
             like = Likes.objects.create(
-                NoSmokingPlaceId_id = id,
-                userId_id = request.id
+                SecondHandSmokingPlaceId = id,
+                userId = request.user
             )
+            likeplace = SecondhandSmokingPlace.objects.get(SecondhandSmokingPlaceId = id)
+            likeplace.likesCount += 1
             return Response({
                 "like" : like
                 }, status=status.HTTP_201_CREATED)
         else:
+            likeplace = SecondhandSmokingPlace.objects.get(SecondhandSmokingPlaceId = id)
+            likeplace.likesCount -= 1
             like.delete()
+            
             return Response(status=status.HTTP_204_NO_CONTENT)
 
