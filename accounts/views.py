@@ -103,8 +103,8 @@ class KakaoLoginView(APIView):
 class KakaoCallbackView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request):
-        code = request.query_params.get("code")
+    def post(self, request):
+        code = request.data.get("code")
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

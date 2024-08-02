@@ -29,7 +29,7 @@ class SmokingPlace(Place):
     )
     rate = models.CharField(max_length=1, choices=CHOICES)
     ashtray = models.BooleanField()
-    isIndoor = models.BooleanField()
+    type = models.CharField(max_length=20)
 
 
 class Likes(models.Model):
