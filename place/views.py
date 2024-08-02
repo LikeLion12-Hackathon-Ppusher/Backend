@@ -138,7 +138,7 @@ class SecondhandSmokingPlaceLikes(APIView):
             )
             likesSerializer = LikesSerializer(data=like)
             return Response({
-                "like" : likesSerializer.validated_data
+                "like" : likesSerializer.data
                 }, status=status.HTTP_201_CREATED)
         else:
             likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
