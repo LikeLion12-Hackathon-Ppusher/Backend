@@ -139,7 +139,7 @@ class SecondhandSmokingPlaceLikes(APIView):
                 "like" : like
                 }, status=status.HTTP_201_CREATED)
         else:
-            likeplace = SecondhandSmokingPlace.objects.get(SecondhandSmokingPlaceId = id)
+            likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
             likeplace.likesCount -= 1
             like.delete()
             
