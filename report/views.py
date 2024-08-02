@@ -8,6 +8,7 @@ from .models import Report
 class PlaceReport(APIView):
     @transaction.atomic
     def post(self, request, format=None):
+
         serializer = ReportSerializer(data=request.data)
         if serializer.is_valid():
             try:

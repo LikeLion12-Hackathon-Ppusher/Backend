@@ -50,7 +50,7 @@ class LoginView(APIView):
         return Response(
             {
                 "user": {
-                    "userId": user.userId,
+                    "userId": user.id,
                     "userName": user.name,
                     "userType": user.userType,
                 },
@@ -104,7 +104,7 @@ class KakaoCallbackView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        code = request.data.get("code")
+        code = request.data.get("authorizationCode")
         if not code:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -138,7 +138,7 @@ class KakaoCallbackView(APIView):
 
 class MyPage(APIView):
     def get(self, request):
-        user = get_object_or_404(User, userId=request.user.userId)
+        user = get_object_or_404(User, userId=request.user)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
@@ -156,7 +156,7 @@ class ReportDetail(APIView):
 
 class ChangeUserType(APIView):
     def put(self, request):
-        user = get_object_or_404(User, userId=request.user.userId)
+        user = get_object_or_404(User, userId=request.user)
         user.userType = request.data.get('userType', user.userType)
         user.save()
         serializer = UserSerializer(user)
@@ -164,8 +164,24 @@ class ChangeUserType(APIView):
 
 class ChangeAlarmOption(APIView):
     def put(self, request):
-        user = get_object_or_404(User, userId=request.user.userId)
+        user = get_object_or_404(User, userId=request.user)
         user.option = request.data.get('option', user.option)
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class ChangeAlarmTime(APIView):
+    def put(self, request):
+        user = get_object_or_404(User, userId=request.user)
+        user.time = request.data.get('time', user.time)
+        user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+        
+class ChangeAlarmDistance(APIView):
+    def put(self, request):
+        user = get_object_or_404(User, userId=request.user)
+        user.distance = request.data.get('distance', user.distance)
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data)

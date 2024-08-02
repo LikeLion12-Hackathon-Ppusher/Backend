@@ -24,12 +24,12 @@ class SmokingPlaceList(APIView):
 
 class SmokingPlaceDetail(APIView):
     def get(self, request, id):
-        place = get_object_or_404(SmokingPlace, place_id=id)
+        place = get_object_or_404(SmokingPlace, placeId=id)
         serializer = SmokingPlaceSerializer(place)
         return Response(serializer.data)
     
     def put(self, request, id):
-        place = get_object_or_404(SmokingPlace, place_id=id)
+        place = get_object_or_404(SmokingPlace, placeId=id)
         serializer = SmokingPlaceSerializer(place, data=request.data)
         if serializer.is_valid():  # Validation is necessary for update
             serializer.save()
@@ -37,7 +37,7 @@ class SmokingPlaceDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, id):
-        place = get_object_or_404(SmokingPlace, place_id=id)
+        place = get_object_or_404(SmokingPlace, placeId=id)
         place.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -59,12 +59,12 @@ class NoSmokingPlaceList(APIView):
 
 class NoSmokingPlaceDetail(APIView):
     def get(self, request, id):
-        place = get_object_or_404(NoSmokingPlace, place_id=id)
+        place = get_object_or_404(NoSmokingPlace, placeId=id)
         serializer = NoSmokingPlaceSerializer(place)
         return Response(serializer.data)
     
     def put(self, request, id):
-        place = get_object_or_404(NoSmokingPlace, place_id=id)
+        place = get_object_or_404(NoSmokingPlace, placeId=id)
         serializer = NoSmokingPlaceSerializer(place, data=request.data)
         if serializer.is_valid():  # Validation is necessary for update
             serializer.save()
@@ -72,7 +72,7 @@ class NoSmokingPlaceDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, id):
-        place = get_object_or_404(NoSmokingPlace, place_id=id)
+        place = get_object_or_404(NoSmokingPlace, placeId=id)
         place.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -94,12 +94,12 @@ class SecondhandSmokingPlaceList(APIView):
 
 class SecondhandSmokingPlaceDetail(APIView):
     def get(self, request, id):
-        place = get_object_or_404(SecondhandSmokingPlace, place_id=id)
+        place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
         serializer = SecondhandSmokingPlaceSerializer(place)
         return Response(serializer.data)
     
     def put(self, request, id):
-        place = get_object_or_404(SecondhandSmokingPlace, place_id=id)
+        place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
         serializer = SecondhandSmokingPlaceSerializer(place, data=request.data)
         if serializer.is_valid():  # Validation is necessary for update
             serializer.save()
@@ -107,7 +107,7 @@ class SecondhandSmokingPlaceDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, id):
-        place = get_object_or_404(SecondhandSmokingPlace, place_id=id)
+        place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
         place.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
