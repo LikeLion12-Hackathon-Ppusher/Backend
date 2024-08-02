@@ -131,6 +131,7 @@ class SecondhandSmokingPlaceLikes(APIView):
             # 생성
             likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
             likeplace.likesCount += 1
+            likeplace.save()
 
             like = Likes.objects.create(
                 SecondHandSmokingPlaceId = likeplace,
@@ -139,12 +140,14 @@ class SecondhandSmokingPlaceLikes(APIView):
             likesSerializer = LikesSerializer(data=like)
             likesSerializer.is_valid()
             return Response({
-                "like" : likesSerializer.validated_data
+                "like" : likesSerializer.validated_data,
+                "likesCount" : likeplace.likesCount
                 }, status=status.HTTP_201_CREATED)
         else:
             likeplace = SecondhandSmokingPlace.objects.get(placeId = id)
             likeplace.likesCount -= 1
+            likeplace.save()
             Likes.objects.filter(SecondHandSmokingPlaceId = id, userId = request.user).delete()
             
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"likesCount" : likeplace.likesCount}, status=status.HTTP_204_NO_CONTENT)
 
