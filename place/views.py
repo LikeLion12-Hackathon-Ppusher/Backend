@@ -152,5 +152,5 @@ class SecondhandSmokingPlaceLikes(APIView):
             likeplace.save()
             Likes.objects.filter(SecondHandSmokingPlaceId = id, userId = request.user).delete()
             
-            return Response({"likesCount" : likeplace.likesCount}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"likesCount" : likeplace.likesCount}, status=status.HTTP_200_OK)
 
