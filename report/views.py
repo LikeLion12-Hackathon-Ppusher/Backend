@@ -17,7 +17,7 @@ class PlaceReport(APIView):
 
                 response_data = {
                     "reportId": report.reportId,
-                    "userId": report.userId.userId,
+                    "userId": report.userId.id,
                     "description": report.description,
                     "reportType": report.reportType,
                     "message": message,
