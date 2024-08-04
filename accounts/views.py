@@ -9,6 +9,7 @@ from .models import User
 from .serializers import UserSerializer, RegisterSerializer, AuthSerializer
 from report.serializers import ReportSerializer
 from report.models import Report
+from place.models import SecondhandSmokingPlace, ReportSmokingPlace, Likes
 from config.settings import KAKAO_CONFIG
 import requests
 
@@ -153,6 +154,26 @@ class ReportDetail(APIView):
         report = get_object_or_404(Report, reportId=reportId, userId=request.user)
         serializer = ReportSerializer(report)
         return Response(serializer.data)
+
+    def delete(self, request, reportId):
+            report_id = reportId
+            if not report_id:
+                return Response({"error": "Report ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                report = Report.objects.get(reportId=report_id, userId=request.user)
+                if report.reportSmokingPlace:
+                    place = ReportSmokingPlace.objects.get(placeId = report.reportSmokingPlace)
+                elif report.secondhandSmokingPlace:
+                    place = SecondhandSmokingPlace.objects.get(placeId = report.secondhandSmokingPlace)
+                    likes = Likes.objects.get(userId = request.user, SecondHandSmokingPlaceId = report.secondhandSmokingPlace)
+                
+                place.delete()
+                likes.delete()
+                report.delete()
+                return Response({"message": "Report has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+            except Report.DoesNotExist:
+                return Response({"error": "Report not found or you do not have permission to delete this report."}, status=status.HTTP_404_NOT_FOUND)
 
 class ChangeUserType(APIView):
     def put(self, request):
