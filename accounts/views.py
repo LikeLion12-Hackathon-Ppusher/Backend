@@ -169,8 +169,7 @@ class ReportDetail(APIView):
                     likes = Likes.objects.get(userId = request.user.id, SecondHandSmokingPlaceId = report.secondhandSmokingPlace.placeId)
                 
                 place.delete()
-                likes.delete()
-                report.delete()
+
                 return Response({"message": "Report has been successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
             except Report.DoesNotExist:
                 return Response({"error": "Report not found or you do not have permission to delete this report."}, status=status.HTTP_404_NOT_FOUND)
