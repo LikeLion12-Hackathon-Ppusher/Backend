@@ -161,12 +161,12 @@ class ReportDetail(APIView):
                 return Response({"error": "Report ID is required."}, status=status.HTTP_400_BAD_REQUEST)
 
             try:
-                report = Report.objects.get(reportId=report_id, userId=request.user)
+                report = Report.objects.get(reportId=report_id, userId=request.user.id)
                 if report.reportSmokingPlace:
-                    place = ReportSmokingPlace.objects.get(placeId = report.reportSmokingPlace)
+                    place = ReportSmokingPlace.objects.get(placeId = report.reportSmokingPlace.placeId)
                 elif report.secondhandSmokingPlace:
-                    place = SecondhandSmokingPlace.objects.get(placeId = report.secondhandSmokingPlace)
-                    likes = Likes.objects.get(userId = request.user, SecondHandSmokingPlaceId = report.secondhandSmokingPlace)
+                    place = SecondhandSmokingPlace.objects.get(placeId = report.secondhandSmokingPlace.placeId)
+                    likes = Likes.objects.get(userId = request.user.id, SecondHandSmokingPlaceId = report.secondhandSmokingPlace.placeId)
                 
                 place.delete()
                 likes.delete()
