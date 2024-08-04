@@ -107,7 +107,7 @@ class SecondhandSmokingPlaceList(APIView):
 class SecondhandSmokingPlaceDetail(APIView):
     def get(self, request, id):
         place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
-        likes = Likes.objects.filter(userId = request.user.id, SecondhandSmokingPlaceId = place.placeId).exists()
+        likes = Likes.objects.filter(userId = request.user.id, SecondHandSmokingPlaceId = place.placeId).exists()
         serializer = SecondhandSmokingPlaceSerializer(place)
         res = serializer.data
         res["isLike"] = likes
