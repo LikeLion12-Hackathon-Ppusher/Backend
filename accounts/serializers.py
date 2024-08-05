@@ -22,6 +22,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             name='test',
             userType='SY',
             kakaoEmail=self.validated_data['kakaoEmail'],
+            distance = 2,
             gender='M'
         )
 
