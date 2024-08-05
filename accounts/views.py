@@ -76,15 +76,15 @@ class LogoutView(APIView):
         logout(request)
         return Response({"message": "로그아웃되었습니다."}, status=status.HTTP_200_OK)
 
-def login_api(social_id: str, email: str = None):
+def login_api(social_id: str, email: str = None, name: str = None):
     user = User.get_user_or_none_by_userId(userId=social_id)
     userbyemail = User.get_user_or_none_by_userEmail(email=email)
     login_view = LoginView()
     if user:
-        data = {'userId': social_id, 'kakaoEmail': email}
+        data = {'userId': social_id, 'kakaoEmail': email, "username": name}
         response = login_view.authenticate_user(data=data)
     else:
-        data = {'userId': social_id, 'kakaoEmail': email}
+        data = {'userId': social_id, 'kakaoEmail': email, "username" : name}
         user_view = UserView()
         user_creation_response = user_view.create_user(data=data)
         response = login_view.authenticate_user(data=data) if user_creation_response.status_code == 201 else user_creation_response
@@ -135,7 +135,8 @@ class KakaoCallbackView(APIView):
 
         social_id = f"kakao_{user_info_response.get('id')}"
         user_email = user_info_response.get('kakao_account', {}).get('email')
-        return login_api(social_id=social_id, email=user_email)
+        user_name =  user_info_response.get('kakao_account', {}).get('name')
+        return login_api(social_id=social_id, email=user_email, name = user_name)
 
 class MyPage(APIView):
     def get(self, request):
