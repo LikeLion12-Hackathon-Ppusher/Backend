@@ -134,7 +134,7 @@ class KakaoCallbackView(APIView):
 
         social_id = f"kakao_{user_info_response.get('id')}"
         user_email = user_info_response.get('kakao_account', {}).get('email')
-        user_name =  user_info_response.get('kakao_account', {}).get('name')
+        user_name =  user_info_response.get('kakao_account', {}).get('profile_nickname')
         return login_api(social_id=social_id, email=user_email, name = user_name)
 
 class MyPage(APIView):
