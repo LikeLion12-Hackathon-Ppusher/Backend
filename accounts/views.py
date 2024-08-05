@@ -87,9 +87,8 @@ def login_api(social_id: str, email: str = None, name: str = None):
         data = {'userId': social_id, 'kakaoEmail': email, "name" : name}
         user_view = UserView()
         user_creation_response = user_view.create_user(data=data)
-        response = login_view.authenticate_user(data=data) if user_creation_response.status_code == 201 else user_creation_response
-        if user_creation_response.status_code == 201:
-            response.status_code = 201
+        response = login_view.authenticate_user(data=data)
+        response.status_code = 201
     return response
 
 class KakaoLoginView(APIView):
