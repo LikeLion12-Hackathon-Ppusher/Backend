@@ -81,10 +81,10 @@ def login_api(social_id: str, email: str = None, name: str = None):
     userbyemail = User.get_user_or_none_by_userEmail(email=email)
     login_view = LoginView()
     if user:
-        data = {'userId': social_id, 'kakaoEmail': email, "username": name}
+        data = {'userId': social_id, 'kakaoEmail': email, "name": name}
         response = login_view.authenticate_user(data=data)
     else:
-        data = {'userId': social_id, 'kakaoEmail': email, "username" : name}
+        data = {'userId': social_id, 'kakaoEmail': email, "name" : name}
         user_view = UserView()
         user_creation_response = user_view.create_user(data=data)
         response = login_view.authenticate_user(data=data) if user_creation_response.status_code == 201 else user_creation_response
