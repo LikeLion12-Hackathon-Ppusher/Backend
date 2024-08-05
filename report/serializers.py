@@ -24,7 +24,7 @@ class ReportSerializer(serializers.ModelSerializer):
             if place_data:
                 place = SecondhandSmokingPlace.objects.create(**place_data)
 
-                like = Likes.objects.create(**{"SecondHandSmokingPlaceId":place, "userId":validated_data["userId"]})
+                # like = Likes.objects.create(**{"SecondHandSmokingPlaceId":place, "userId":validated_data["userId"]})
                 validated_data['secondhandSmokingPlace'] = place
 
         return Report.objects.create(**validated_data)
