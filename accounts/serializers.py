@@ -19,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             userId=self.validated_data['userId'],
-            name='test',
+            name=self.validated_data['username'],
             userType='SY',
             kakaoEmail=self.validated_data['kakaoEmail'],
             distance = 2,
