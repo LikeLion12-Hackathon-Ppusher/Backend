@@ -2,8 +2,12 @@
 ## 서비스
 ![서비스명](https://i.postimg.cc/52qCFQhj/image.png)
 [사용 방법](https://github.com/LikeLion12-Hackathon-Ppusher/Frontend/blob/main/README.md)
+
 ## API 명세
 ![api명세](https://i.postimg.cc/8PkBDSsq/image.png)
+
+## ERD
+![ERD](https://i.postimg.cc/8zbPd2Tm/image.png)
 ## 개발 환경
 Django 5.0.7  
 Python 3.12.4
