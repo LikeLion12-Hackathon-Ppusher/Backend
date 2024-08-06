@@ -86,7 +86,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [ 
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://wellnesstour.netlify.app"
+    "https://wellnesstour.netlify.app",
+    "https://wehadam.netlify.app"
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -204,7 +205,8 @@ SIMPLE_JWT = {
 
 KAKAO_CONFIG = {
     "KAKAO_REST_API_KEY": get_secret("KAKAO_REST_API_KEY"),
-    "KAKAO_REDIRECT_URI": "http://localhost:3000/oauth",
+    #"KAKAO_REDIRECT_URI": "http://localhost:3000/oauth",
+    "KAKAO_REDIRECT_URI" : "https://wehadam.netlify.app/oauth",
     # "KAKAO_REDIRECT_URI": "https://wellnesstour.netlify.app/oauth",
     "KAKAO_CLIENT_SECRET_KEY": get_secret("KAKAO_CLIENT_SECRET_KEY"), 
 }
