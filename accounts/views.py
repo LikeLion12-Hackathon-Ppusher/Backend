@@ -166,7 +166,7 @@ class ReportDetail(APIView):
                     place = ReportSmokingPlace.objects.get(placeId = report.reportSmokingPlace.placeId)
                 elif report.secondhandSmokingPlace:
                     place = SecondhandSmokingPlace.objects.get(placeId = report.secondhandSmokingPlace.placeId)
-                    likes = Likes.objects.get(userId = request.user.id, SecondHandSmokingPlaceId = report.secondhandSmokingPlace.placeId)
+                    #likes = Likes.objects.get(userId = request.user.id, SecondHandSmokingPlaceId = report.secondhandSmokingPlace.placeId)
                 
                 place.delete()
 
