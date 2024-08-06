@@ -6,8 +6,6 @@
 ## API 명세
 ![api명세](https://i.postimg.cc/8PkBDSsq/image.png)
 
-## ERD
-![ERD](https://i.postimg.cc/8zbPd2Tm/image.png)
 ## 개발 환경
 Django 5.0.7  
 Python 3.12.4
