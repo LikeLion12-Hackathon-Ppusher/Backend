@@ -8,6 +8,7 @@ from .models import Report
 class PlaceReport(APIView):
     @transaction.atomic
     def post(self, request, format=None):
+
         serializer = ReportSerializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -16,14 +17,14 @@ class PlaceReport(APIView):
 
                 response_data = {
                     "reportId": report.reportId,
-                    "userId": report.userId.userId,
+                    "userId": report.userId.id,
                     "description": report.description,
                     "reportType": report.reportType,
                     "message": message,
                 }
                 
-                if report.reportType == 'SM':
-                    response_data["placeId"] = report.smokingPlace_id
+                if report.reportType == 'SM' :
+                    response_data["placeId"] = report.reportSmokingPlace_id
                 elif report.reportType == 'SH':
                     response_data["placeId"] = report.secondhandSmokingPlace_id
 
@@ -31,3 +32,8 @@ class PlaceReport(APIView):
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+

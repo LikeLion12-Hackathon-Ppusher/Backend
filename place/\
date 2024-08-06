@@ -107,11 +107,8 @@ class SecondhandSmokingPlaceList(APIView):
 class SecondhandSmokingPlaceDetail(APIView):
     def get(self, request, id):
         place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
-        likes = Likes.objects.filter(userId = request.user.id, SecondHandSmokingPlaceId = place.placeId).exists()
         serializer = SecondhandSmokingPlaceSerializer(place)
-        res = serializer.data
-        res["isLike"] = likes
-        return Response(res)
+        return Response(serializer.data)
     
     def put(self, request, id):
         place = get_object_or_404(SecondhandSmokingPlace, placeId=id)
@@ -152,5 +149,18 @@ class SecondhandSmokingPlaceLikes(APIView):
             likeplace.save()
             Likes.objects.filter(SecondHandSmokingPlaceId = id, userId = request.user).delete()
             
-            return Response({"likesCount" : likeplace.likesCount}, status=status.HTTP_200_OK)
+            return Response({"likesCount" : likeplace.likesCount}, status=status.HTTP_204_NO_CONTENT)
 
+from django.shortcuts import redirect
+class navigateView(APIView):
+    def get(self, request):
+        start_lat = 37.5665
+        start_lon = 126.978
+        end_lat = 37.565
+        end_lon = 123.968
+
+        # 카카오맵 스키마 URL 생성
+        map_url = f"kakaomap://route?sp={start_lat},{start_lon}&ep={end_lat},{end_lon}&by=FOOT"
+
+        # 생성된 URL로 리다이렉트
+        return redirect(map_url)

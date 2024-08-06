@@ -13,15 +13,16 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userId','kakaoEmail']
+        fields = ['userId','kakaoEmail','name']
         # fields = ['userId', 'name', 'kakaoEmail', 'userType', 'gender']
 
     def create(self, validated_data):
         user = User.objects.create(
             userId=self.validated_data['userId'],
-            name='test',
+            name=self.validated_data['name'],
             userType='SY',
             kakaoEmail=self.validated_data['kakaoEmail'],
+            distance = 2,
             gender='M'
         )
 
